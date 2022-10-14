@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".zidingyitupian"
+    android:orientation="vertical">
+    <Button
+        android:id="@+id/pz"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:text="拍照"
+        android:autoSizeTextType="uniform"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/button_drawable"
+        android:textColor="#ffffff"
+        />
+
+    <Button
+        android:id="@+id/tk"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:autoSizeTextType="uniform"
+        android:text="图库选择"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/button_drawable"
+        android:textColor="#ffffff"
+        />
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
+</LinearLayout>

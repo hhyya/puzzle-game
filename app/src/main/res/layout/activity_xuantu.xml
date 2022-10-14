@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".xuantu"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/yxtp"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:text="选择游戏内图片"
+        android:textSize="40dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/button_drawable"
+        android:textColor="#ffffff"
+
+        />
+
+    <Button
+        android:id="@+id/zidingyi"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:autoSizeTextType="uniform"
+        android:text="自定义图片"
+        android:textSize="40dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="40dp"
+        android:background="@drawable/button_drawable"
+        android:textColor="#ffffff"
+        />
+</LinearLayout>

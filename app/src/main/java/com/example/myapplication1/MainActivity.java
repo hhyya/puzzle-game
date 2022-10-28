@@ -8,18 +8,22 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private TextView tv;
+    private Button bt1;
+    private Button bt2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        tv = findViewById(R.id.ks);    //ctrl+alt+f，提取变量为全局变量
-        findViewById(R.id.ks).setOnClickListener(this);
+        bt1 = findViewById(R.id.ks);    //ctrl+alt+f，提取变量为全局变量
+        bt2 = findViewById(R.id.exit);
+        bt1.setOnClickListener(this);
+        bt2.setOnClickListener(this);
     }
 
     @Override
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Log.i("PERMISSION","请求权限成功");
         }
     }
+
+
 
     @Override
     public void onRequestPermissionsResult(
@@ -55,8 +61,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        Intent intent = new Intent();
-        intent.setClass(this,xuantu.class);
-        startActivity(intent);
+        switch (view.getId()){
+            case R.id.ks:
+                Intent intent = new Intent();
+                intent.setClass(this,xuantu.class);
+                startActivity(intent);
+                break;
+            case R.id.exit:
+                finish();
+        }
+
     }
 }

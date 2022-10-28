@@ -48,11 +48,14 @@ public class youxitupian extends AppCompatActivity implements View.OnClickListen
         img = findViewById(view.getId());
         img.setDrawingCacheEnabled(Boolean.TRUE);
         Intent yxtpintent = new Intent();
-        yxtpintent.setClass(this,pintu.class);
+        yxtpintent.setClass(this,GameActivity.class);
         Bundle b = new Bundle();
         b.putInt("flag", 1);
         yxtpintent.putExtras(b);
-        yxtpintent.putExtra("yxtp", img.getDrawingCache());
+        GamePintuLayout.mBitmap = img.getDrawingCache();
+//        yxtpintent.putExtra("yxtp", img.getDrawingCache());
         startActivity(yxtpintent);
     }
+
+
 }

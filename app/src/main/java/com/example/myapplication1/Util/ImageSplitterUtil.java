@@ -1,8 +1,10 @@
-package com.example.myapplication1;
+package com.example.myapplication1.Util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+
+import com.example.myapplication1.ImagePiece;
 
 import java.util.ArrayList;
 import java.util.List;

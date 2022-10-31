@@ -2,7 +2,6 @@ package com.example.myapplication1;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
@@ -17,10 +16,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.myapplication1.Util.ImageSplitterUtil;
+import com.example.myapplication1.Util.SpUtil;
+
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 public class GamePintuLayout extends RelativeLayout implements View.OnClickListener{
     /**
@@ -51,7 +52,7 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
      * 游戏的图片
      */
     public static Bitmap mBitmap;
-
+    public static Bitmap emptyBitmap;
     private List<ImagePiece> mItemsBitmaps;
     private String[] tags;
     private boolean once;
@@ -62,6 +63,14 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
     private boolean canContinuePoint = true;
     private Context context;
 
+    //移动的空白最终所要到位置
+    private int moveImageIndex;
+    //移动的空白现在所处的位置
+    private int moveImagePosition;
+
+    //游戏步数
+    private int step = 0;
+
     /**
      * 回调的接口
      */
@@ -69,6 +78,8 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
         void gamesuccess();
 
         void timeChanged(int currentTime);
+
+        void stepChanged(int currentstep);
 
     }
 
@@ -83,6 +94,7 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
 
     private static final int TIME_CHANGED = 01;
     private static final int NEXT_LEVEL = 11;
+    private static final int STEP_CHANGED = 21;
 
     private Handler mHandler = new Handler() {
 
@@ -97,16 +109,27 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
                     }
                     SpUtil.put(context, "time", mTime);
                     mTime++;
-                    //   Log.e("gj", "++++++++++++++" + mTime);
                     mHandler.sendEmptyMessageDelayed(TIME_CHANGED, 1000); // 继续使用handler发送广播达到时间递减的效果
                     break;
                 case NEXT_LEVEL:
                     if (mListener != null) {
-                        mListener.gamesuccess();
+                        canContinuePoint = false;
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mListener.gamesuccess();
+                            }
+                        }, 2000);//2秒后执行Runnable中的run方法
                     } else {
                         nextLevel();
                         canContinuePoint = false;
                     }
+                    break;
+                case STEP_CHANGED:
+                    //步数增加
+                    step++;
+                    mListener.stepChanged(step);
                     break;
 
                 default:
@@ -211,20 +234,30 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
      */
     private void initBitmap() {
         // 这里设置图片
-//        mBitmap = ;
+        // mBitmap = ;
         // 按照指定图片和列数进行切图
         mItemsBitmaps = ImageSplitterUtil.splitImage(mBitmap, mColumn);
         tags = SpUtil.getStringArray(context, "tag");
-        // 使用 sort 使图片乱序的功能
+        // 使用 mess函数 使图片乱序并保证拼图有解
         if (tags.length <= 0) {
             tags = new String[mColumn * mColumn];
-            Collections.sort(mItemsBitmaps, new Comparator<ImagePiece>() {
-
-                @Override
-                public int compare(ImagePiece a, ImagePiece b) {
-                    return Math.random() > 0.5 ? 1 : -1;
-                }
-            });
+            Random r = new Random();
+            moveImageIndex = r.nextInt(mColumn*mColumn);
+            emptyBitmap = mItemsBitmaps.get(moveImageIndex).getBitmap();
+            mItemsBitmaps.set(moveImageIndex,new ImagePiece(moveImageIndex,null));
+            int blankPosition = moveImageIndex + 1;
+            for(int i = 0; i < 100; i++)
+            {
+                blankPosition = mess(blankPosition);
+            }
+//            for (int i = 0; i < mColumn * mColumn; i++) {
+//                if(mItemsBitmaps.get(i).getIndex() == moveImageIndex)
+//                {
+//                    moveImagePosition = i + 1;
+//                    break;
+//                }
+//            }
+            moveImagePosition = blankPosition;
         } else {
             List<ImagePiece> list = new ArrayList<>();
             for (int i = 0; i < mColumn * mColumn; i++) {
@@ -296,6 +329,88 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
     }
 
     /**
+     * 打乱图片并使拼图有解(0代表上，1代表左，2代表右，3代表下)
+     */
+    private int mess(int blankPosition){
+        Random r = new Random();
+        int direction = 0;
+        if(blankPosition % mColumn == 1)
+        {
+            if(blankPosition == 1)
+            {
+                direction = r.nextInt(2) + 2;
+            }else  if(blankPosition == mColumn * mColumn - mColumn + 1)
+            {
+                direction = r.nextInt(2);
+                if(direction == 1)
+                    direction = 2;
+            }else
+            {
+                direction = r.nextInt(3);
+                if(direction == 1)
+                    direction = 3;
+            }
+        }else if(blankPosition % mColumn == 0)
+        {
+            if(blankPosition == mColumn)
+            {
+                direction = r.nextInt(2);
+                if(direction == 0)
+                    direction = 3;
+            }else if(blankPosition == mColumn * mColumn)
+            {
+                direction = r.nextInt(2);
+            }else
+            {
+                direction = r.nextInt(3);
+                if(direction == 2)
+                    direction = 3;
+            }
+        }else
+        {
+            if(blankPosition < mColumn)
+            {
+                direction = r.nextInt(3) + 1;
+            }else if(blankPosition > mColumn * mColumn - mColumn)
+            {
+                direction = r.nextInt(3);
+            }else
+            {
+                direction = r.nextInt(4);
+            }
+        }
+        switch ((direction)){
+            case 0:
+                swap(mItemsBitmaps, blankPosition - 1, blankPosition - 1 - mColumn);
+                blankPosition = blankPosition - mColumn;
+                break;
+            case 1:
+                swap(mItemsBitmaps, blankPosition - 1, blankPosition - 2);
+                blankPosition = blankPosition - 1;
+                break;
+            case 2:
+                swap(mItemsBitmaps, blankPosition - 1, blankPosition );
+                blankPosition = blankPosition + 1;
+                break;
+            case 3:
+                swap(mItemsBitmaps, blankPosition - 1, blankPosition - 1 + mColumn);
+                blankPosition = blankPosition + mColumn;
+                break;
+        }
+        return  blankPosition;
+    }
+    private static <E> void swap(List<E> list,int index1,int index2) {
+        //定义第三方变量
+        E e=list.get(index1);
+        //交换值
+        list.set(index1, list.get(index2));
+        list.set(index2, e);
+    }
+
+
+
+
+    /**
      * 获取多个参数的最小值
      *
      * @return
@@ -323,7 +438,36 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
         if (isAniming || !canContinuePoint) {
             return;
         }
-
+        //只能点击空白周围的Item
+        if(moveImagePosition % mColumn == 1)
+        {
+            if(!(v.getId() == moveImagePosition || v.getId() == moveImagePosition + 1 ||
+                    v.getId() == moveImagePosition + mColumn || v.getId() == moveImagePosition - mColumn))
+            {
+                return;
+            }
+        }else if(moveImagePosition % mColumn == 0)
+        {
+            if(!(v.getId() == moveImagePosition || v.getId() == moveImagePosition - 1 ||
+                    v.getId() == moveImagePosition + mColumn || v.getId() == moveImagePosition - mColumn))
+            {
+                return;
+            }
+        }else
+        {
+            if(!(v.getId() == moveImagePosition || v.getId() == moveImagePosition + 1 ||
+                    v.getId() == moveImagePosition + mColumn || v.getId() == moveImagePosition - mColumn
+                    || v.getId() == moveImagePosition - 1))
+            {
+                return;
+            }
+        }
+        // 空白周围的图片相互之间不能交换
+        if(mFirst != null && mFirst.getId() != moveImagePosition && mFirst != v)
+        {
+            if(v.getId() != moveImagePosition)
+                return;
+        }
         // 两次点击同一个Item 取消高亮
         if (mFirst == v) {
             mFirst.setColorFilter(null);
@@ -417,6 +561,12 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
                 mFirst.setImageBitmap(secondBitmap);
                 mSecond.setImageBitmap(firstBitmap);
 
+                // 改变空白所处位置
+                if(mFirst.getId() == moveImagePosition){
+                    moveImagePosition = mSecond.getId();
+                }else {
+                    moveImagePosition = mFirst.getId();
+                }
                 /**
                  * 上面的交换图片的代码只是将指点点击区域的图片进行了改变 但是该区域的相应的信息 (例如：tag和index并没有交换
                  * 就是说该区域显示的图片的信息始终没有改变只是将图片换了 这样会为后面的判断是否过关
@@ -427,6 +577,10 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
 
                 mFirst.setVisibility(View.VISIBLE);
                 mSecond.setVisibility(View.VISIBLE);
+
+                //游戏步数增加
+                mHandler.removeMessages(STEP_CHANGED);
+                mHandler.sendEmptyMessage(STEP_CHANGED);
 
                 // 将他们赋值为空 方便下次点击的时候是
                 mFirst = mSecond = null;
@@ -451,7 +605,6 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
             ImageView imageView = mGamePintuItems[i];
 
             tags[i] = i+"_"+getImageIndex((String) imageView.getTag());
-            Log.d("gj", "success" + i + tags[i]);
             SpUtil.putStringArray(context, "tag", tags);
         }
         for (int j = 0; j < mGamePintuItems.length; j++) {
@@ -463,6 +616,14 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
         }
 
         if (isSuccess) {
+            for(int i = 0;i < mGamePintuItems.length; i++)
+            {
+                if(getImageIndex((String) mGamePintuItems[i].getTag()) == moveImageIndex){
+                    mGamePintuItems[i].setImageBitmap(emptyBitmap);
+                    break;
+                }
+            }
+
             isGameSuccess = true;
             // 删掉上一关卡的handler消息 防止进入下一关的时候接收到消息的频率变快 时间变快
             mHandler.removeMessages(NEXT_LEVEL);
@@ -530,7 +691,7 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
      */
     public int nextLevel() {
         System.out.println("进入GamePintuLayout的nextLevel方法");
-        if (mColumn < 7) {
+        if (mColumn < 5) {
             this.removeAllViews();
             mAnimLayout = null;
             mColumn++;
@@ -540,6 +701,10 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
             canContinuePoint = false;
             mHandler.removeMessages(TIME_CHANGED);
             setTimeEabled(false);
+            // 重置步数
+            step = -1;
+            mHandler.removeMessages(STEP_CHANGED);
+            mHandler.sendEmptyMessage(STEP_CHANGED);
             // 重新更新时间
             checkTimeEnable();
             // 重置页面
@@ -554,7 +719,7 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
     public int lastLevel() {
         System.out.println("进入GamePintuLayout的lastLevel方法");
 
-        if (mColumn > 3) {
+        if (mColumn > 2) {
             this.removeAllViews();
             mAnimLayout = null;
             mColumn--;
@@ -564,6 +729,10 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
             canContinuePoint = false;
             mHandler.removeMessages(TIME_CHANGED);
             setTimeEabled(false);
+            // 重置步数
+            step = -1;
+            mHandler.removeMessages(STEP_CHANGED);
+            mHandler.sendEmptyMessage(STEP_CHANGED);
             // 重新更新时间
             checkTimeEnable();
             // 重置页面

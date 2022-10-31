@@ -1,4 +1,4 @@
-package com.example.myapplication1;
+package com.example.myapplication1.Util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,6 +15,9 @@ public class SpUtil {
     public static final String FILE_NAME = "share_data";
     public static final String FILE_NAME1 = "difficult_data";
 
+    /**
+     * 本地存储对象
+     */
     public static void put(Context context, String key, Object object) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
@@ -47,6 +50,9 @@ public class SpUtil {
         editor.commit();
     }
 
+    /**
+     *从本地读取存储的对象
+     */
     public static Object get(Context context, String key, Object defaultObject) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         if (defaultObject instanceof String) {
@@ -64,23 +70,15 @@ public class SpUtil {
         }
     }
 
-    public static void remove(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.remove(key);
-        editor.commit();
-    }
 
+    /**
+     * 清除本地存储内容
+     */
     public static void clear(Context context) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
         editor.commit();
-    }
-
-    public static boolean contains(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-        return sp.contains(key);
     }
 
     private static Object getObject(Context context, String key) {
@@ -98,6 +96,9 @@ public class SpUtil {
         return null;
     }
 
+    /**
+     * 往本地存入字符串数组
+     */
     public static void putStringArray(Context context, String name, String[] strings) {
         SharedPreferences.Editor edit = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE).edit();
 
@@ -109,6 +110,9 @@ public class SpUtil {
         edit.commit();
     }
 
+    /**
+     * 从本地读取字符串数组
+     */
     public static String[] getStringArray(Context context, String name) {
 
         SharedPreferences prefs = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
@@ -118,18 +122,6 @@ public class SpUtil {
             ret[i] = prefs.getString("StringValue_" + name + i, "");
         }
         return ret;
-    }
-
-    public static void putDifficult(Context context, String key, int object) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME1, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(key, object);
-        editor.commit();
-    }
-
-    public static int getDifficult(Context context, String key, int object) {
-        SharedPreferences sp = context.getSharedPreferences(FILE_NAME1, Context.MODE_PRIVATE);
-        return sp.getInt(key, object);
     }
 
 }

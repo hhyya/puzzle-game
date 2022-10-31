@@ -18,6 +18,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.myapplication1.Util.ScreenUtils;
+import com.example.myapplication1.Util.SpUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -30,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
     private GamePintuLayout mGamePintuLayout;
     private TextView mLevel;
     private TextView mTime;
+    private TextView mStep;
     private Button mPicture;
     private Button btnstart, btnpause, btnAddLevel, btnReduceLevel;
     private AlertDialog pauseDialog;
@@ -43,18 +47,23 @@ public class GameActivity extends AppCompatActivity {
             SpUtil.clear(GameActivity.this);
             SpUtil.put(GameActivity.this, "save", true);
             contentResolver = this.getContentResolver();
-//            Toolbar toolbar = findViewById(R.id.myToolbarg);
-//            toolbar.setTitle(getResources().getString(R.string.app_name));
-//            toolbar.setTitleTextColor(Color.WHITE);
-//            this.setSupportActionBar(toolbar);
-
             mTime = findViewById(R.id.id_time);
             if ((Integer) (SpUtil.get(GameActivity.this, "time", 0)) > 0) {
                 int i = (Integer) SpUtil.get(GameActivity.this, "time", 0);
                 mTime.setText("" + i);
             }
             mLevel = findViewById(R.id.id_level);
-            mLevel.setText("" + (GamePintuLayout.mColumn - 2));
+            if(GamePintuLayout.mColumn == 2)
+                mLevel.setText("练手");
+            else if(GamePintuLayout.mColumn == 3)
+                mLevel.setText("普通");
+            else if(GamePintuLayout.mColumn == 4)
+                mLevel.setText("困难");
+            else if(GamePintuLayout.mColumn == 5)
+                mLevel.setText("炼狱");
+
+            mStep = findViewById(R.id.id_step);
+            mStep.setText("" + 0 );
 
             mPicture = findViewById(R.id.tu);
             mPicture.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +105,9 @@ public class GameActivity extends AppCompatActivity {
                 public void timeChanged(int currentTime) {
                     mTime.setText("" + currentTime);
                 }
+
+                @Override
+                public void stepChanged(int currentStep)  { mStep.setText("" + currentStep);}
 
                 @Override
                 public void gamesuccess() {
@@ -146,8 +158,8 @@ public class GameActivity extends AppCompatActivity {
                     mGamePintuLayout.pause();
                     mGamePintuLayout.reSume();
                     btnstart.setEnabled(false);
-                    btnAddLevel.setEnabled(false);
-                    btnReduceLevel.setEnabled(false);
+                    btnAddLevel.setEnabled(true);
+                    btnReduceLevel.setEnabled(true);
                 }
             });
             btnpause.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +175,14 @@ public class GameActivity extends AppCompatActivity {
                     mTime.setText("0");
                     SpUtil.clear(GameActivity.this);
                     int i = mGamePintuLayout.nextLevel();
-                    mLevel.setText("" + (i - 2));
+                    btnstart.setEnabled(true);
+                    if(i == 3)
+                        mLevel.setText("普通");
+                    else if(i == 4)
+                        mLevel.setText("困难");
+                    else if(i == 5)
+                        mLevel.setText("炼狱");
+
                 }
             });
             btnReduceLevel.setOnClickListener(new View.OnClickListener() {
@@ -172,7 +191,13 @@ public class GameActivity extends AppCompatActivity {
                     mTime.setText("0");
                     SpUtil.clear(GameActivity.this);
                     int i = mGamePintuLayout.lastLevel();
-                    mLevel.setText("" + (i - 2));
+                    btnstart.setEnabled(true);
+                    if(i == 2)
+                        mLevel.setText("练手");
+                    else if(i == 3)
+                        mLevel.setText("普通");
+                    else if(i == 4)
+                        mLevel.setText("困难");
                 }
             });
         }catch (Exception e){
@@ -232,6 +257,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * 按返回键时触发事件
+     */
     @Override
     public void onBackPressed() {
         status = false;
@@ -261,6 +289,9 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 查看原图时跳出对话框
+     */
     private void showDialog(){
         View view = LayoutInflater.from(this).inflate(R.layout.design_dialog,null,false);
         final AlertDialog dialog = new AlertDialog.Builder(this).setView(view).create();
@@ -271,7 +302,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent();
-                intent.setClass(GameActivity.this,xuantu.class);
+                intent.setClass(GameActivity.this, ChoosePicture.class);
                 startActivity(intent);
                 dialog.dismiss();
             }
@@ -280,6 +311,11 @@ public class GameActivity extends AppCompatActivity {
         dialog.getWindow().setLayout((ScreenUtils.getScreenWidth(this)/4*3), LinearLayout.LayoutParams.WRAP_CONTENT);
     }
 
+    /**
+     * 将uri转换为Bitmap
+     * @param uri
+     * @return
+     */
     private Bitmap ImageSizeCompress(Uri uri) {
         InputStream Stream = null;
         InputStream inputStream = null;

@@ -3,13 +3,11 @@ package com.example.myapplication1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-public class youxitupian extends AppCompatActivity implements View.OnClickListener {
+public class IngamePictures extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView img1;
     private ImageView img2;
@@ -23,7 +21,7 @@ public class youxitupian extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_youxitupian);
+        setContentView(R.layout.activity_ingamepictures);
         img1 = findViewById(R.id.img1);
         img2 = findViewById(R.id.img2);
         img3 = findViewById(R.id.img3);
@@ -43,6 +41,7 @@ public class youxitupian extends AppCompatActivity implements View.OnClickListen
         img8.setOnClickListener(this);
     }
 
+    //点击哪张图片就把哪张图片作为拼图背景
     @Override
     public void onClick(View view) {
         img = findViewById(view.getId());

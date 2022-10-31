@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:text="退出游戏"
         android:textSize="50dp"
+        android:layout_marginLeft="80dp"
         />
 
 </LinearLayout>

@@ -27,28 +27,21 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".youxitupian"
+            android:name=".IngamePictures"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".xuantu"
+            android:name=".ChoosePicture"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".pintu"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".zidingyitupian"
+            android:name=".CustomImages"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

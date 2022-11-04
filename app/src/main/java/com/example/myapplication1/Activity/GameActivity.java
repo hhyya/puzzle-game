@@ -61,6 +61,8 @@ public class GameActivity extends AppCompatActivity {
             else if(GamePintuLayout.mColumn == 4)
                 mLevel.setText("困难");
             else if(GamePintuLayout.mColumn == 5)
+                mLevel.setText("极难");
+            else if(GamePintuLayout.mColumn == 6)
                 mLevel.setText("炼狱");
 
             mStep = findViewById(R.id.id_step);
@@ -182,6 +184,8 @@ public class GameActivity extends AppCompatActivity {
                     else if(i == 4)
                         mLevel.setText("困难");
                     else if(i == 5)
+                        mLevel.setText("极难");
+                    else if(i == 6)
                         mLevel.setText("炼狱");
 
                 }
@@ -199,6 +203,8 @@ public class GameActivity extends AppCompatActivity {
                         mLevel.setText("普通");
                     else if(i == 4)
                         mLevel.setText("困难");
+                    else if(i == 5)
+                        mLevel.setText("极难");
                 }
             });
         }catch (Exception e){
@@ -271,17 +277,17 @@ public class GameActivity extends AppCompatActivity {
                 .setPositiveButton(getResources().getString(R.string.quit_directly), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        SpUtil.clear(GameActivity.this);
-                        GameActivity.this.finish();
                         dialogInterface.dismiss();
+                        SpUtil.clear(GameActivity.this);
+                        Intent intent = new Intent();
+                        intent.setClass(GameActivity.this, MainActivity.class);
+                        startActivity(intent);
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.quit_save), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.continue_game), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
-                        SpUtil.put(GameActivity.this, "save", true);
-                        GameActivity.this.finish();
                     }
                 })
                 .setCancelable(false)

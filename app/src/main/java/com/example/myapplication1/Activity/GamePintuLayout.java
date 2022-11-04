@@ -693,7 +693,7 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
      */
     public int nextLevel() {
         System.out.println("进入GamePintuLayout的nextLevel方法");
-        if (mColumn < 5) {
+        if (mColumn < 6) {
             this.removeAllViews();
             mAnimLayout = null;
             mColumn++;

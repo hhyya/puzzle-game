@@ -1,4 +1,4 @@
-package com.example.myapplication1;
+package com.example.myapplication1.Activity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.myapplication1.R;
 import com.example.myapplication1.Util.ScreenUtils;
 import com.example.myapplication1.Util.SpUtil;
 
@@ -135,7 +136,7 @@ public class GameActivity extends AppCompatActivity {
                             dialog.dismiss();
                             SpUtil.clear(GameActivity.this);
                             Intent intent = new Intent();
-                            intent.setClass(GameActivity.this,MainActivity.class);
+                            intent.setClass(GameActivity.this, MainActivity.class);
                             startActivity(intent);
                         }
                     });

@@ -1,4 +1,4 @@
-package com.example.myapplication1;
+package com.example.myapplication1.functional;
 
 import android.Manifest;
 import android.app.Activity;

@@ -1,4 +1,4 @@
-package com.example.myapplication1;
+package com.example.myapplication1.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.example.myapplication1.Activity.GameActivity;
+import com.example.myapplication1.Activity.GamePintuLayout;
+import com.example.myapplication1.R;
 
 public class IngamePictures extends AppCompatActivity implements View.OnClickListener {
 
@@ -47,7 +51,7 @@ public class IngamePictures extends AppCompatActivity implements View.OnClickLis
         img = findViewById(view.getId());
         img.setDrawingCacheEnabled(Boolean.TRUE);
         Intent yxtpintent = new Intent();
-        yxtpintent.setClass(this,GameActivity.class);
+        yxtpintent.setClass(this, GameActivity.class);
         Bundle b = new Bundle();
         b.putInt("flag", 1);
         yxtpintent.putExtras(b);

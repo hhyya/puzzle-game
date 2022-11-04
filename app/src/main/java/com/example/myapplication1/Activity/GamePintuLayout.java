@@ -1,4 +1,4 @@
-package com.example.myapplication1;
+package com.example.myapplication1.Activity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.myapplication1.Util.ImagePiece;
+import com.example.myapplication1.R;
 import com.example.myapplication1.Util.ImageSplitterUtil;
 import com.example.myapplication1.Util.SpUtil;
 
@@ -246,7 +248,7 @@ public class GamePintuLayout extends RelativeLayout implements View.OnClickListe
             emptyBitmap = mItemsBitmaps.get(moveImageIndex).getBitmap();
             mItemsBitmaps.set(moveImageIndex,new ImagePiece(moveImageIndex,null));
             int blankPosition = moveImageIndex + 1;
-            for(int i = 0; i < 100; i++)
+            for(int i = 0; i < 1000; i++)
             {
                 blankPosition = mess(blankPosition);
             }

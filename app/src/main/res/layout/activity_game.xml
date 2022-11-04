@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameActivity">
+    tools:context=".Activity.GameActivity">
 
 
     <LinearLayout
@@ -93,7 +93,7 @@
         </LinearLayout>
 
     </LinearLayout>
-    <com.example.myapplication1.GamePintuLayout
+    <com.example.myapplication1.Activity.GamePintuLayout
         android:layout_marginTop="10dp"
         android:id="@+id/id_game_pintu"
         android:layout_width="match_parent"

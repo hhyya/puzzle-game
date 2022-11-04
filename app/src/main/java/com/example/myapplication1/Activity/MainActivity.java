@@ -1,4 +1,4 @@
-package com.example.myapplication1;
+package com.example.myapplication1.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.myapplication1.functional.Permission;
+import com.example.myapplication1.R;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()){
             case R.id.ks:
                 Intent intent = new Intent();
-                intent.setClass(this, ChoosePicture.class);
+                intent.setClass(this, LoginActivity.class);
                 startActivity(intent);
                 break;
             case R.id.exit:
